@@ -1,0 +1,52 @@
+<?php
+// Funcție pentru preluarea și afișarea conținutului unei pagini web
+function fetch_page_content() {
+    // URL-ul paginii pe care dorim să o preluăm
+    $url = 'http://sporturi-live.ro/live/baschet/view-events.html';
+    
+    // Inițializare cURL pentru preluarea conținutului
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Conținutul este returnat ca un string
+    $html_content = curl_exec($ch); // Executăm cererea
+    $error = curl_error($ch); // Capturăm erorile, dacă există
+    curl_close($ch); // Închidem conexiunea cURL
+
+    // Verificăm dacă am obținut un răspuns valid
+    if ($html_content === false || empty($html_content)) {
+        return 'Eroare la preluarea conținutului: ' . $error;
+    }
+
+    // Stiluri CSS pentru o afișare mai bună
+    $html = '<style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        table th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>';
+
+    // Returnăm conținutul HTML și stilurile CSS
+    return $html . $html_content;
+}
+
+// Afișăm rezultatul
+echo fetch_page_content();
+?>
